@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Категории{% endblock %}
+{% block content %}
+    <div class="container-md">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title text-center">Добро пожаловать в ООО "Оверпрайс"</h1>
+                <h3 class="card-text text-center">Куча товаров по завышенным ценам</h3>
+            </div>
+        </div>
+        <hr>
+        <h1>Топ товаров</h1>
+        <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="card mx-auto col" style="width: 18rem;">
+                        <img src="/static/images/Apple-IPhone-14.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">IPhone</h5>
+                            <p class="card-text">Какая разница, берите андроид</p>
+                            <p class="card-text fw-bold">Цена: 8800 ₽</p>
+                            <a href="/main/about" class="btn btn-primary">О товаре</a>
+                        </div>
+                    </div> 
+                </div>
+                <div class="carousel-item">
+                    <div class="card mx-auto col" style="width: 18rem;">
+                        <img src="https://i.pinimg.com/736x/9a/94/3d/9a943d8cf49594e478d3a34411c887a7.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Игровой ноутбук</h5>
+                            <p class="card-text">Мега машина для запуска 3 героев</p>
+                            <p class="card-text fw-bold">Цена: 8800 ₽</p>
+                            <a href="/main/about" class="btn btn-primary">О товаре</a>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    
+{% endblock %}

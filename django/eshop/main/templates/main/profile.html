@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Категории{% endblock %}
+{% block content %}
+    <h1>Пользователь: {{request.user.username}}</h1> 
+    {% for order_data in orders_with_items %}
+        <div class="card my-3">
+            <div class="card-body">
+                <h3 class="card-text">Заказ №{{ order_data.order.id }}</h3>
+                <p class="card-text">Адрес доставки: {{ order_data.order.delivery_address }}</p>
+                <h4 class="card-text">Товары:</h4>
+                <ul>
+                    {% for item in order_data.items %}
+                    <li>{{ item.product.name }} - {{ item.quantity }} шт. × {{ item.product.price }} руб.</li>
+                    {% endfor %}
+                </ul>
+                <p class="card-text">Сумма: {{ order_data.order.total_price }} руб.</p>
+            </div>
+        </div>
+    {% empty %}
+        <p>У вас пока нет заказов.</p>
+    {% endfor %}
+{% endblock %}

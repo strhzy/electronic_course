@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Категории{% endblock %}
+{% block content %}
+    <div class="container-md">
+        <div class="card mx-auto col" style="width: 18rem;">
+            <img src="https://i.pinimg.com/736x/74/a8/de/74a8de50487322c61715252c945a1e79.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">IPhone</h5>
+                <p class="card-text">Какая разница, берите андроид</p>
+                <a class="btn btn-danger">Удалить</a>
+                <a href="/main/about" class="btn btn-primary">О товаре</a>
+                <div class="d-flex align-items-center mt-2">
+                    <button class="btn btn-outline-secondary btn-sm me-2">−</button>
+                    <span>1</span>
+                    <button class="btn btn-outline-secondary btn-sm ms-2">+</button>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-2 mx-auto" style="width: 24rem;">
+            <h3 class="ms-3">Итого: 8800 ₽</h3>
+            <a class="btn btn-success mt-2 w-100" href="#">Оформить заказ</a>
+        </div>
+    </div>
+{% endblock %}

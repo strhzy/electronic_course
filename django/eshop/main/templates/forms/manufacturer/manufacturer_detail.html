@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}{{ object.name }}{% endblock %}
+{% block content %}
+    <h1>{{ object.name }}</h1>
+    <p><strong>Country:</strong> {{ object.country|default:"N/A" }}</p>
+    <p><strong>Website:</strong> <a href="{{ object.website }}" target="_blank">{{ object.website|default:"N/A" }}</a></p>
+    <a href="{% url 'manufacturer_update' object.pk %}" class="btn btn-warning">Edit</a>
+    <a href="{% url 'manufacturer_delete' object.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'manufacturer_list' %}" class="btn btn-secondary">Back to Manufacturers</a>
+{% endblock %}

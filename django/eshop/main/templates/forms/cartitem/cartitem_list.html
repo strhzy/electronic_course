@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Cart Items{% endblock %}
+{% block content %}
+    <h1 class="mb-4">Cart Items</h1>
+    <a href="{% url 'cartitem_create' %}" class="btn btn-primary mb-3">Add Cart Item</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cartitem in cart_items %}
+                <tr>
+                    <td><a href="{% url 'cartitem_detail' cartitem.pk %}">{{ cartitem.user }}</a></td>
+                    <td>{{ cartitem.product.name }}</td>
+                    <td>{{ cartitem.quantity }}</td>
+                    <td>{{ cartitem.price }}</td>
+                    <td>
+                        <a href="{% url 'cartitem_update' cartitem.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'cartitem_delete' cartitem.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No cart items found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

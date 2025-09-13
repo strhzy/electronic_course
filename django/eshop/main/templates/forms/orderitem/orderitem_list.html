@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Order Items{% endblock %}
+{% block content %}
+    <h1 class="mb-4">Order Items</h1>
+    <a href="{% url 'orderitem_create' %}" class="btn btn-primary mb-3">Add Order Item</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for orderitem in order_items %}
+                <tr>
+                    <td><a href="{% url 'orderitem_detail' orderitem.pk %}">{{ orderitem.order.id }}</a></td>
+                    <td>{{ orderitem.product.name }}</td>
+                    <td>{{ orderitem.quantity }}</td>
+                    <td>{{ orderitem.price }}</td>
+                    <td>
+                        <a href="{% url 'orderitem_update' orderitem.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'orderitem_delete' orderitem.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No order items found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

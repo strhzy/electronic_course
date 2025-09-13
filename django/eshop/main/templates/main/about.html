@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Категории{% endblock %}
+{% block content %}
+    <div class="container-md">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                {% if product.photo %}
+                    <img src="{{ product.photo.url }}" class="img-fluid rounded" alt="{{ product.name|escape }}" style="max-height: 400px; object-fit: contain;">
+                {% else %}
+                    <img src="https://via.placeholder.com/400" class="img-fluid rounded" alt="Нет фото">
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h1 class="mb-3">{{ product.name }}</h1>
+                <p class="lead">{{ product.description|default:"Нет описания" }}</p>
+                <h3>{{ product.price }} ₽</h3>
+                <p><strong>Категория:</strong> {{ product.category.name }}</p>
+                <p><strong>Производитель:</strong> {{ product.manufacturer.name|default:"Не указан" }}</p>
+                <p><strong>Наличие:</strong> {% if product.is_exists %}В наличии{% else %}Нет в наличии{% endif %}</p>
+                {% if request.user.is_authenticated %}
+                    <form method="post" action="{% url 'cart_add' product.pk %}">
+                        {% csrf_token %}
+                        {{form_cart}}
+                        <button type="submit" class="btn btn-success">Добавить в корзину</button>
+                    </form>
+                {%endif%}
+            </div>
+        </div>
+        <hr>
+        <h2 class="mb-4">Отзывы</h2>
+        {% for review in product.reviews.all %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.customer.username }} <span class="badge bg-warning text-dark">{{ review.rating }} ★</span></h5>
+                    <p class="card-text">{{ review.comment|default:"Без комментария" }}</p>
+                    <p class="card-text"><small class="text-muted">{{ review.created_at|date:"d.m.Y H:i" }}</small></p>
+                </div>
+            </div>
+        {% empty %}
+            <p>Отзывов пока нет 😔</p>
+        {% endfor %}
+        {% if user.is_authenticated %}
+            <h3 class="mb-3">Оставить отзыв</h3>
+            <form method="POST" class="mb-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Рейтинг</label>
+                    <select class="form-select" name="rating" id="rating" required>
+                        {% for i in "12345" %}
+                            <option value="{{ i }}">{{ i }} ★</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Комментарий</label>
+                    <textarea class="form-control" name="comment" id="comment" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login_page' %}">Войдите</a>, чтобы оставить отзыв.</p>
+        {% endif %}
+    </div>
+{% endblock %}

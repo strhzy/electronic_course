@@ -1,0 +1,34 @@
+version: '3.8'  # Убедитесь, что версия не ниже 2.1
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: root
+      POSTGRES_DB: eshop
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d eshop"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+
+  django:
+    image: eshop
+    build: .
+    ports:
+      - 8081:8000
+    depends_on:
+      db:
+        condition: service_healthy

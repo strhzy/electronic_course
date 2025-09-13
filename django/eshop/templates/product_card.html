@@ -1,0 +1,20 @@
+<div class="card mx-auto col" style="width: 18rem; height: 35rem">
+    {% if product.photo %}
+        <img src="{{ product.photo.url }}" class="card-img-top" style="height: 65%; width: auto; object-fit: cover" alt="{{ product.name }}">
+    {% else %}
+        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Нет фото">
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="card-text">{{ product.description|truncatewords:10 }}</p>
+        <p class="card-text fw-bold">{{ product.price }} ₽</p>
+        <a class="btn btn-success" href="{% url 'about' product.id %}">О товаре</a>
+        {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'cart_add' product.id %}">
+                {% csrf_token %}
+                {{form_cart}}
+                <button type="submit" class="btn btn-success">Добавить в корзину</button>
+            </form>
+        {%endif%}
+    </div>
+</div>
