@@ -1,17 +1,13 @@
 FROM python:3.13-slim
 
 WORKDIR /app
-EXPOSE 5250
+EXPOSE 8000
 
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
 COPY . .
-
-RUN pip install gunicorn
-
-RUN python manage.py collectstatic --noinput
 
 ENTRYPOINT ["sh", "-c"]
 

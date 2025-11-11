@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('cart/', include('cart.urls')),
     path('api/', include('api.urls')),
+    path('prometheus/', include('django_prometheus.urls'))
 ]
 
 if settings.DEBUG:

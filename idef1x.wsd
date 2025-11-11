@@ -1,0 +1,104 @@
+@startuml
+'=========================================================
+' IDEF1X / ER-диаграмма Django-проекта (by GPT-5 & Алексей)
+'=========================================================
+
+hide circle
+hide methods
+hide stereotypes
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+skinparam rectangle {
+  BackgroundColor #f9f9f9
+  BorderColor #333
+}
+
+entity "Category" as Category {
+    *id : integer <<PK>>
+    --
+    name : varchar(100)
+    description : text
+}
+
+entity "Manufacturer" as Manufacturer {
+    *id : integer <<PK>>
+    --
+    name : varchar(100)
+    country : varchar(100)
+    website : url
+}
+
+entity "Product" as Product {
+    *id : integer <<PK>>
+    --
+    name : varchar(256)
+    description : text
+    price : float
+    photo : image
+    is_exists : boolean
+    --
+    category_id : integer <<FK>>
+    manufacturer_id : integer <<FK>>
+}
+
+entity "Customer" as Customer {
+    *id : integer <<PK>>
+    --
+    first_name : varchar(100)
+    last_name : varchar(100)
+    email : email (unique)
+    phone : varchar(20)
+    address : text
+}
+
+entity "Review" as Review {
+    *id : integer <<PK>>
+    --
+    rating : smallint (1–5)
+    comment : text
+    created_at : datetime
+    --
+    product_id : integer <<FK>>
+    user_id : integer <<FK>>  -- связка с auth_user
+}
+
+entity "Order" as Order {
+    *id : integer <<PK>>
+    --
+    buyer_firstname : varchar(150)
+    buyer_surname : varchar(150)
+    comment : text
+    delivery_address : varchar(150)
+    total_price : float
+    --
+    user_id : integer <<FK>>  -- auth_user
+}
+
+entity "OrderItem" as OrderItem {
+    *id : integer <<PK>>
+    --
+    quantity : integer
+    --
+    order_id : integer <<FK>>
+    product_id : integer <<FK>>
+}
+
+entity "CartItem" as CartItem {
+    *id : integer <<PK>>
+    --
+    quantity : integer
+    price : decimal(10,2)
+    --
+    user_id : integer <<FK>>  -- Customer
+    product_id : integer <<FK>>
+}
+
+entity "auth_user" as User {
+    *id : integer <<PK>>
+    --
+    username : varchar(150)
+    email : varchar(254)
+    password : hash
+}
+
+@enduml

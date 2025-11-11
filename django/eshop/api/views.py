@@ -13,14 +13,11 @@ class DynamicModelViewSet(MethodRestrictionsMixin,viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissions]
     search_fields = []
     default_http_methods_restrictions = {
-        '*': {
-            'disable_methods': ['patch']  # Для всех моделей запрещаем PATCH
-        },
         'main.order': {
-            'disable_methods': ['put', 'delete']  # Для Order запрещаем PUT и DELETE
+            'disable_methods': ['put', 'delete']
         },
         'main.orderitem': {
-            'disable_methods': ['put', 'delete']  # Пример для другой модели
+            'disable_methods': ['put', 'delete']
         }
     }
     

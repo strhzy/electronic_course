@@ -1,0 +1,9 @@
+digraph "packages_eshop" {
+rankdir=BT
+charset="utf-8"
+"eshop" [color="black", label=<eshop>, shape="box", style="solid"];
+"eshop.asgi" [color="black", label=<eshop.asgi>, shape="box", style="solid"];
+"eshop.settings" [color="black", label=<eshop.settings>, shape="box", style="solid"];
+"eshop.urls" [color="black", label=<eshop.urls>, shape="box", style="solid"];
+"eshop.wsgi" [color="black", label=<eshop.wsgi>, shape="box", style="solid"];
+}

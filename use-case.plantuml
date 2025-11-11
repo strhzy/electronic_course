@@ -1,0 +1,96 @@
+@startuml
+left to right direction
+
+actor "Неавторизованный пользователь" as guest
+actor Покупатель as customer
+actor Менеджер as manager
+actor Администратор as admin
+
+rectangle "Информационная система" {
+
+  ' === Общие ===
+  usecase "Авторизация в системе" as UC_Login
+  usecase "Просмотр каталога товаров" as UC_BrowseCatalog
+
+  ' === Для гостей ===
+  usecase "Регистрация" as UC_Register
+  usecase "Восстановление пароля" as UC_RecoverPassword
+
+  ' === Покупатель ===
+  usecase "Оформление заказа" as UC_PlaceOrder
+  usecase "Добавление товара в корзину" as UC_AddToCart
+  usecase "Управление корзиной" as UC_ManageCart
+  usecase "Просмотр своих заказов" as UC_ViewOwnOrders
+  usecase "Редактирование профиля" as UC_EditProfile
+  usecase "Смена пароля" as UC_ChangePassword
+
+  ' === Менеджер ===
+  usecase "Управление заказами" as UC_ManageOrders
+  usecase "Управление товарами" as UC_ManageProducts
+  usecase "Управление категориями" as UC_ManageCategories
+
+  ' === Администратор ===
+  usecase "Полный CRUD: Категории" as UC_CRUD_Category
+  usecase "Полный CRUD: Производители" as UC_CRUD_Manufacturer
+  usecase "Полный CRUD: Товары" as UC_CRUD_Product
+  usecase "Полный CRUD: Клиенты" as UC_CRUD_Customer
+  usecase "Полный CRUD: Отзывы" as UC_CRUD_Review
+  usecase "Полный CRUD: Заказы" as UC_CRUD_Order
+  usecase "Полный CRUD: Сотрудники" as UC_CRUD_Employee
+  usecase "Полный CRUD: Филиалы" as UC_CRUD_Branch
+  usecase "Полный CRUD: Рекламные блоки" as UC_CRUD_AdBanner
+
+  usecase "Управление пользователями (блокировка, роли)" as UC_ManageUsers
+  usecase "Резервное копирование БД" as UC_BackupDB
+  usecase "Восстановление БД" as UC_RestoreDB
+  usecase "Экспорт данных (CSV/SQL)" as UC_ExportData
+
+  ' === Зависимости ===
+  UC_Register ..> UC_Login : <<include>>
+  UC_PlaceOrder ..> UC_AddToCart : <<include>>
+  UC_PlaceOrder ..> UC_BrowseCatalog : <<include>>
+  UC_ManageCart ..> UC_BrowseCatalog : <<include>>
+  UC_ViewOwnOrders ..> UC_Login : <<include>>
+  UC_EditProfile ..> UC_Login : <<include>>
+  UC_ChangePassword ..> UC_Login : <<include>>
+  UC_RecoverPassword ..> UC_Login : <<extend>>
+  UC_ManageOrders ..> UC_BrowseCatalog : <<include>>
+  UC_ManageProducts ..> UC_BrowseCatalog : <<include>>
+
+  ' === Связи ===
+  guest --> UC_BrowseCatalog
+  guest --> UC_Register
+  guest --> UC_Login
+
+  customer --> UC_Login
+  customer --> UC_PlaceOrder
+  customer --> UC_AddToCart
+  customer --> UC_ManageCart
+  customer --> UC_ViewOwnOrders
+  customer --> UC_EditProfile
+  customer --> UC_ChangePassword
+  customer --> UC_RecoverPassword
+
+  manager --> UC_Login
+  manager --> UC_ManageOrders
+  manager --> UC_ManageProducts
+  manager --> UC_ManageCategories
+
+  admin --> UC_Login
+  admin --> UC_CRUD_Category
+  admin --> UC_CRUD_Manufacturer
+  admin --> UC_CRUD_Product
+  admin --> UC_CRUD_Customer
+  admin --> UC_CRUD_Review
+  admin --> UC_CRUD_Order
+  admin --> UC_CRUD_Employee
+  admin --> UC_CRUD_Branch
+  admin --> UC_CRUD_AdBanner
+  admin --> UC_ManageUsers
+  admin --> UC_BackupDB
+  admin --> UC_RestoreDB
+  admin --> UC_ExportData
+
+}
+
+@enduml

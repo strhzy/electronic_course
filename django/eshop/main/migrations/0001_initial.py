@@ -113,4 +113,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Отзывы',
             },
         ),
+        migrations.RunSQL("""
+SELECT * FROM bebebe
+""")
     ]
