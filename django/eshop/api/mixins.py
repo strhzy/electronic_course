@@ -26,12 +26,26 @@ class MethodRestrictionsMixin:
         return [m.upper() for m in ['get', 'post', 'put', 'patch', 'delete'] 
                 if m not in disabled_methods]
     
+    @property
+    def allowed_methods(self):
+        base = super().allowed_methods
+        disabled = [m.upper() for m in self.get_method_restrictions().get('disable_methods', [])]
+        result = [m for m in base if m not in disabled]
+        print(f"[DEBUG] allowed_methods: base={base}, disabled={disabled}, result={result}")
+        return result
+
+    def options(self, request, *args, **kwargs):
+        response = Response()
+        response['Allow'] = ', '.join(self.allowed_methods)
+        response['Content-Length'] = '0'
+        return response
+
     def _method_not_allowed_response(self, request, method):
         response = Response(
             {
                 "detail": f"Method {method.upper()} not allowed for this model",
                 "model": self.get_model_name(),
-                "allowed_methods": self._get_allowed_methods()
+                "allowed_methods": self.allowed_methods
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )

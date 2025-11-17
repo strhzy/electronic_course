@@ -1,7 +1,19 @@
 from django.contrib import admin
 
 from django.contrib import admin
-from .models import Category, Manufacturer, Product, Customer, Review, Order, OrderItem
+from .models import Category, Manufacturer, Product, Customer, Review, Order, OrderItem, Log
+
+@admin.register(Log)
+class LogAdmin(admin.ModelAdmin):
+    list_display = ('created_at', 'message', 'table')
+    search_fields = ('created_at', 'table')
+    list_filter = ('table',)
+    ordering = ('created_at',)
+    fieldsets = (
+        (None, {
+            'fields': ('created_at', 'message', 'table')
+        }),
+    )
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

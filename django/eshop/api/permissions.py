@@ -1,20 +1,7 @@
 from rest_framework.permissions import BasePermission
 
 class ModelActionPermission(BasePermission):
-    MODEL_PERMISSIONS = {
-        'main.Order': {
-            'GET': ['is_authenticated'],
-            'POST': ['is_authenticated'],
-            'PUT': ['is_staff'],
-            'DELETE': [],
-        },
-        'main.OrderItem': {
-            'GET': ['is_authenticated'],  
-            'POST': ['is_authenticated'],
-            'PUT': ['is_staff'],
-            'DELETE': [],
-        }
-    }
+    MODEL_PERMISSIONS = {}
 
     def has_permission(self, request, view):
         model_name = f"{view.queryset.model._meta.app_label}.{view.queryset.model.__name__}"

@@ -35,6 +35,9 @@ class AutoRegisterRouter(DefaultRouter):
         viewset = type(
             f'{model.__name__}ViewSet',
             (DynamicModelViewSet,),
-            {'model': model}
+            {
+                'model': model,
+                'queryset': model.objects.none()  # или .all() — важно, что не None
+            }
         )
         self.register(model_name, viewset, basename=basename)

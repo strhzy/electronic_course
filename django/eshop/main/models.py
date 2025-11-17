@@ -112,3 +112,15 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} (x{self.quantity})"
+    
+class Log(models.Model):
+
+    created_at = models.DateTimeField(default=timezone.now)
+    message = models.TextField(blank=True, verbose_name="Сообщение лога")
+    table = models.TextField(blank=True, verbose_name="Таблица")
+
+    class Meta:
+        verbose_name = "Лог"
+
+    def __str__(self):
+        return f"{self.table}: {self.message} - {self.created_at}"

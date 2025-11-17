@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, serializers
 from rest_framework.permissions import DjangoModelPermissions
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
@@ -9,32 +9,24 @@ from .permissions import ModelActionPermission
 from .mixins import MethodRestrictionsMixin
 
 class DynamicModelViewSet(MethodRestrictionsMixin,viewsets.ModelViewSet):
-    serializer_class = ModelActionPermission
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [ModelActionPermission]
     search_fields = []
-    default_http_methods_restrictions = {
-        'main.order': {
-            'disable_methods': ['put', 'delete']
-        },
-        'main.orderitem': {
-            'disable_methods': ['put', 'delete']
-        }
-    }
     
     def get_queryset(self):
         return self.model.objects.all()
     
     def get_serializer_class(self):
+        model = self.model
+        meta_attrs = {
+            'model': model,
+            'fields': '__all__'
+        }
+        meta = type('Meta', (), meta_attrs)
         return type(
-            f'Dynamic{self.model.__name__}Serializer',
-            (DynamicModelSerializer,),
-            {}
+            f'{model.__name__}Serializer',
+            (serializers.ModelSerializer,),
+            {'Meta': meta}
         )
-    
-    def get_serializer(self, *args, **kwargs):
-        serializer_class = self.get_serializer_class()
-        kwargs['model'] = self.model
-        return serializer_class(*args, **kwargs)
     
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_param = 'q'
