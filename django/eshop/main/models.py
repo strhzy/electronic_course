@@ -92,6 +92,10 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items", verbose_name="Заказ")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Товар")
     quantity = models.PositiveIntegerField(default=1, verbose_name="Количество")
+    @property
+    def total(self):
+        return self.quantity * self.product.price
+    total.fget.short_description = "Общая цена"
 
     class Meta:
         verbose_name = "Элемент заказа"

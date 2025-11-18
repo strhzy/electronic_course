@@ -1,49 +1,134 @@
 {% extends 'base.html' %}
-{% block title %}Категории{% endblock %}
+{% block title %}Главная страница{% endblock %}
 {% block content %}
-    <div class="container-md">
-        <div class="card">
-            <div class="card-body">
-                <h1 class="card-title text-center">Добро пожаловать в ООО "Оверпрайс"</h1>
-                <h3 class="card-text text-center">Куча товаров по завышенным ценам</h3>
-            </div>
-        </div>
-        <hr>
-        <h1>Топ товаров</h1>
-        <div id="carouselExample" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="card mx-auto col" style="width: 18rem;">
-                        <img src="/static/images/Apple-IPhone-14.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">IPhone</h5>
-                            <p class="card-text">Какая разница, берите андроид</p>
-                            <p class="card-text fw-bold">Цена: 8800 ₽</p>
-                            <a href="/main/about" class="btn btn-primary">О товаре</a>
-                        </div>
-                    </div> 
-                </div>
-                <div class="carousel-item">
-                    <div class="card mx-auto col" style="width: 18rem;">
-                        <img src="https://i.pinimg.com/736x/9a/94/3d/9a943d8cf49594e478d3a34411c887a7.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Игровой ноутбук</h5>
-                            <p class="card-text">Мега машина для запуска 3 героев</p>
-                            <p class="card-text fw-bold">Цена: 8800 ₽</p>
-                            <a href="/main/about" class="btn btn-primary">О товаре</a>
-                        </div>
-                    </div> 
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+<div class="container-md">
+    <div class="card shadow mb-4">
+        <div class="card-body text-center py-5">
+            <h1 class="card-title display-4 mb-3">Добро пожаловать в ООО "Оверпрайс"</h1>
+            <h3 class="card-text lead text-muted">Куча товаров по завышенным ценам</h3>
         </div>
     </div>
+
+    <hr class="my-4">
+
+    <h2 class="text-center mb-4">Топ товаров</h2>
     
+    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="card shadow h-100">
+                            <img src="/static/images/Apple-IPhone-14.jpg" class="card-img-top product-carousel-image" alt="iPhone">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">IPhone</h5>
+                                <p class="card-text flex-grow-1 text-muted">Какая разница, берите андроид</p>
+                                <p class="card-text fw-bold text-accent">Цена: 8800 ₽</p>
+                                <a href="/main/about" class="btn btn-primary mt-auto">О товаре</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="card shadow h-100">
+                            <img src="https://i.pinimg.com/736x/9a/94/3d/9a943d8cf49594e478d3a34411c887a7.jpg" class="card-img-top product-carousel-image" alt="Игровой ноутбук">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Игровой ноутбук</h5>
+                                <p class="card-text flex-grow-1 text-muted">Мега машина для запуска 3 героев</p>
+                                <p class="card-text fw-bold text-accent">Цена: 8800 ₽</p>
+                                <a href="/main/about" class="btn btn-primary mt-auto">О товаре</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<style>
+:root {
+    --primary-color: #46394B;
+    --secondary-color: #5D4E61;
+    --accent-color: #8A6B8C;
+    --light-color: #B8A9B9;
+    --text-color: #E8E8E8;
+    --dark-bg: #2D2A32;
+    --darker-bg: #1E1C22;
+}
+
+body {
+    background: linear-gradient(135deg, var(--darker-bg) 0%, #3A2E40 50%, var(--primary-color) 100%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.card {
+    background-color: rgba(45, 42, 50, 0.95);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+    backdrop-filter: blur(10px);
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.text-muted {
+    color: var(--light-color) !important;
+}
+
+.product-carousel-image {
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    padding: 10px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+}
+
+hr {
+    border-color: var(--secondary-color);
+    opacity: 0.5;
+}
+
+.display-4 {
+    color: var(--text-color);
+    font-weight: 300;
+}
+
+.lead {
+    font-size: 1.25rem;
+}
+</style>
 {% endblock %}

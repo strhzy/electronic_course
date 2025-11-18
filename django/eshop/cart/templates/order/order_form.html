@@ -5,10 +5,139 @@
 {%endblock%}
 
 {%block content%}
-    <h1>Оформление заказа</h1>
-    <form action="{% url 'cart_buy' %}" method="post">
-        {% csrf_token %}
-        {{form_order.as_div}}
-        <button type="submit" class="btn btn-outline-primary">Подтвердить заказ</button>
-    </form>
+<div class="container-md">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center mb-0">Оформление заказа</h2>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'cart_buy' %}" method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form_order.as_div }}
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                            <a href="{% url 'cart_detail' %}" class="btn btn-outline-secondary me-md-2">
+                                <i class="bi bi-arrow-left me-2"></i>Вернуться в корзину
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg me-2"></i>Подтвердить заказ
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+:root {
+    --primary-color: #46394B;
+    --secondary-color: #5D4E61;
+    --accent-color: #8A6B8C;
+    --light-color: #B8A9B9;
+    --text-color: #E8E8E8;
+    --dark-bg: #2D2A32;
+    --darker-bg: #1E1C22;
+}
+
+body {
+    background: linear-gradient(135deg, var(--darker-bg) 0%, #3A2E40 50%, var(--primary-color) 100%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.card {
+    background-color: rgba(45, 42, 50, 0.95);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+    backdrop-filter: blur(10px);
+}
+
+.card-header {
+    background-color: var(--primary-color) !important;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.btn-success {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.btn-success:hover {
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+.btn-outline-secondary {
+    border-color: var(--secondary-color);
+    color: var(--light-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.form-control, .form-select {
+    background-color: var(--dark-bg);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--dark-bg);
+    border-color: var(--accent-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.25rem rgba(138, 107, 140, 0.25);
+}
+
+.form-label {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.needs-validation .form-control:invalid,
+.needs-validation .form-select:invalid {
+    border-color: #dc3545;
+}
+
+.needs-validation .form-control:valid,
+.needs-validation .form-select:valid {
+    border-color: #198754;
+}
+
+/* Стили для формы as_div */
+form div {
+    margin-bottom: 1rem;
+}
+
+form label {
+    color: var(--text-color);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+form input, form select, form textarea {
+    background-color: var(--dark-bg) !important;
+    border: 1px solid var(--secondary-color) !important;
+    color: var(--text-color) !important;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(138, 107, 140, 0.25) !important;
+}
+
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css');
+</style>
 {%endblock%}

@@ -1,10 +1,25 @@
 from django.contrib import admin
-
+from import_export.admin import ExportMixin
 from django.contrib import admin
+from django.http import HttpResponse
 from .models import Category, Manufacturer, Product, Customer, Review, Order, OrderItem, Log
+import csv
+
+@admin.action(description="Экспортировать выбранные объекты в CSV")
+def export_as_csv(modeladmin, request, queryset):
+    meta = modeladmin.model._meta
+    field_names = [field.name for field in meta.fields]
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename={meta}.csv'
+    writer = csv.writer(response)
+    writer.writerow(field_names)
+    for obj in queryset:
+        writer.writerow([getattr(obj, field) for field in field_names])
+    return response
 
 @admin.register(Log)
-class LogAdmin(admin.ModelAdmin):
+class LogAdmin(admin.ModelAdmin, ExportMixin):
     list_display = ('created_at', 'message', 'table')
     search_fields = ('created_at', 'table')
     list_filter = ('table',)
@@ -14,6 +29,7 @@ class LogAdmin(admin.ModelAdmin):
             'fields': ('created_at', 'message', 'table')
         }),
     )
+    actions = [export_as_csv]
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

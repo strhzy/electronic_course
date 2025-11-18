@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
-{% block title %}Категории{% endblock %}
+{% block title %}Каталог{% endblock %}
 {% block content %}
-    <div class="container-md">
-        <div class="card px-2 mb-3">
-            <form method="GET" class="mb-2 d-flex justify-content-between align-items-end">
-                <div>
+<div class="container-md">
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Фильтры и поиск</h4>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3 align-items-end">
+                <div class="col-md-3">
                     <label for="sort" class="form-label">Сортировать по</label>
                     <select class="form-select" name="sort" id="sort" onchange="this.form.submit()">
                         <option value="">Без сортировки</option>
@@ -12,7 +16,7 @@
                         <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Цене ↓</option>
                     </select>
                 </div>
-                <div>
+                <div class="col-md-3">
                     <label for="category" class="form-label">Категория</label>
                     <select class="form-select" name="category" id="category" onchange="this.form.submit()">
                         <option value="">Все категории</option>
@@ -21,7 +25,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div>
+                <div class="col-md-3">
                     <label for="manufacturer" class="form-label">Производитель</label>
                     <select class="form-select" name="manufacturer" id="manufacturer" onchange="this.form.submit()">
                         <option value="">Все производители</option>
@@ -30,18 +34,103 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div>
+                <div class="col-md-3">
                     <label for="search" class="form-label">Поиск</label>
-                    <input class="form-control" type="search" name="search" id="search" placeholder="Поиск..." value="{{ search }}" aria-label="Поиск">
+                    <div class="input-group">
+                        <input class="form-control" type="search" name="search" id="search" placeholder="Поиск..." value="{{ search }}" aria-label="Поиск">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
-        <div class="row row-cols-md-2 row-cols-sm-1 g-3">
-            {% for product in products %}
-                {% include 'product_card.html' with product=product%}
-            {% empty %}
-                <p class="text-center">Товары не найдены 😔</p>
-            {% endfor %}
-        </div>
     </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for product in products %}
+            {% include 'product_card.html' with product=product %}
+        {% empty %}
+            <div class="col-12">
+                <div class="card shadow text-center">
+                    <div class="card-body py-5">
+                        <h5 class="text-muted">Товары не найдены 😔</h5>
+                        <p class="text-muted mb-0">Попробуйте изменить параметры поиска</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+:root {
+    --primary-color: #46394B;
+    --secondary-color: #5D4E61;
+    --accent-color: #8A6B8C;
+    --light-color: #B8A9B9;
+    --text-color: #E8E8E8;
+    --dark-bg: #2D2A32;
+    --darker-bg: #1E1C22;
+}
+
+body {
+    background: linear-gradient(135deg, var(--darker-bg) 0%, #3A2E40 50%, var(--primary-color) 100%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.card {
+    background-color: rgba(45, 42, 50, 0.95);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+    backdrop-filter: blur(10px);
+}
+
+.card-header {
+    background-color: var(--primary-color) !important;
+    border-bottom: 1px solid var(--secondary-color);
+}
+.btn-outline-secondary {
+    border-color: var(--secondary-color);
+    color: var(--light-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.form-control, .form-select {
+    background-color: var(--dark-bg);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--dark-bg);
+    border-color: var(--accent-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.25rem rgba(138, 107, 140, 0.25);
+}
+
+.form-label {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.text-muted {
+    color: var(--light-color) !important;
+}
+
+.input-group .btn {
+    border-left: none;
+}
+
+.input-group .form-control:focus + .btn {
+    border-color: var(--accent-color);
+}
+</style>
 {% endblock %}

@@ -5,16 +5,91 @@
 {% endblock %}
 {% block content %}
 
-<h1>Авторизация</h1>
+<div class="container-md">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center mb-0">Авторизация</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.as_div }}
+                        </div>
+                        <div class="d-grid">
+                            <input type="submit" value="Войти" class="btn btn-primary btn-lg">
+                        </div>
+                    </form>
 
-<div>
-    <form method="post">
-        {% csrf_token %}
-        {{form.as_div}}
-        <input type="submit" value="Войти">
-    </form>
-
-    <a href="{% url 'registration_page' %}">Зарегистрироваться</a>
-    <a href="/">Назад</a>
+                    <div class="mt-3 text-center">
+                        <a href="{% url 'registration_page' %}" class="text-accent me-3">Зарегистрироваться</a>
+                        <a href="/" class="text-accent">Назад</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{%endblock%}
+
+<style>
+:root {
+    --primary-color: #46394B;
+    --secondary-color: #5D4E61;
+    --accent-color: #8A6B8C;
+    --light-color: #B8A9B9;
+    --text-color: #E8E8E8;
+    --dark-bg: #2D2A32;
+    --darker-bg: #1E1C22;
+}
+
+body {
+    background-color: var(--darker-bg);
+    color: var(--text-color);
+}
+
+.card {
+    background-color: var(--dark-bg);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+}
+
+.card-header {
+    background-color: var(--primary-color) !important;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.form-control {
+    background-color: var(--dark-bg);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    background-color: var(--dark-bg);
+    border-color: var(--accent-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.25rem rgba(138, 107, 140, 0.25);
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+    text-decoration: none;
+}
+
+.text-accent:hover {
+    color: var(--light-color) !important;
+}
+</style>
+{% endblock %}
