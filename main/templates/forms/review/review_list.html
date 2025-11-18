@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Reviews{% endblock %}
+{% block content %}
+    <h1 class="mb-4">Reviews</h1>
+    <a href="{% url 'review_create' %}" class="btn btn-primary mb-3">Add Review</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Customer</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for review in reviews %}
+                <tr>
+                    <td><a href="{% url 'review_detail' review.pk %}">{{ review.product.name }}</a></td>
+                    <td>{{ review.customer }}</td>
+                    <td>{{ review.rating }}</td>
+                    <td>{{ review.comment|truncatewords:20 }}</td>
+                    <td>{{ review.created_at|date:"Y-m-d" }}</td>
+                    <td>
+                        <a href="{% url 'review_update' review.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'review_delete' review.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6">No reviews found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Delete Manufacturer{% endblock %}
+{% block content %}
+<div class="container-md">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="text-center mb-0">Удаление производителя</h2>
+                </div>
+                <div class="card-body text-center">
+                    <h4 class="mb-4">Вы уверены, что хотите удалить производителя "{{ object.name }}"?</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-danger me-md-2">Подтвердить удаление</button>
+                            <a href="{% url 'manufacturer_list' %}" class="btn btn-secondary">Отмена</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+:root {
+    --primary-color: #46394B;
+    --secondary-color: #5D4E61;
+    --accent-color: #8A6B8C;
+    --light-color: #B8A9B9;
+    --text-color: #E8E8E8;
+    --dark-bg: #2D2A32;
+    --darker-bg: #1E1C22;
+}
+
+body {
+    background: linear-gradient(135deg, var(--darker-bg) 0%, #3A2E40 50%, var(--primary-color) 100%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.card {
+    background-color: rgba(45, 42, 50, 0.95);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+    backdrop-filter: blur(10px);
+}
+
+.card-header {
+    background-color: var(--primary-color) !important;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+</style>
+{% endblock %}

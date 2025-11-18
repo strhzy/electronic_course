@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<div class="container-md">
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    {% if product.photo %}
+                        <img src="{{ product.photo.url }}" class="img-fluid rounded product-image" alt="{{ product.name|escape }}">
+                    {% else %}
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 400px;">
+                            <span class="text-muted">Нет фото</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h1 class="mb-3">{{ product.name }}</h1>
+                    <p class="lead text-muted">{{ product.description|default:"Нет описания" }}</p>
+                    <h3 class="text-accent mb-3">{{ product.price }} ₽</h3>
+                    <div class="mb-3">
+                        <p><strong>Категория:</strong> {{ product.category.name }}</p>
+                        <p><strong>Производитель:</strong> {{ product.manufacturer.name|default:"Не указан" }}</p>
+                        <p>
+                            <strong>Наличие:</strong> 
+                            <span class="badge {% if product.is_exists %}bg-success{% else %}bg-danger{% endif %}">
+                                {% if product.is_exists %}В наличии{% else %}Нет в наличии{% endif %}
+                            </span>
+                        </p>
+                    </div>
+                    {% if request.user.is_authenticated %}
+                        <form method="post" action="{% url 'cart_add' product.pk %}" class="mt-4">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                {{ form_cart }}
+                            </div>
+                            <button type="submit" class="btn btn-success btn-lg">Добавить в корзину</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow">
+        <div class="card-body">
+            <h2 class="mb-4">Отзывы</h2>
+            {% for review in product.reviews.all %}
+                <div class="card mb-3 bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ review.customer.username }} 
+                            <span class="badge bg-warning text-dark">{{ review.rating }} ★</span>
+                        </h5>
+                        <p class="card-text">{{ review.comment|default:"Без комментария" }}</p>
+                        <p class="card-text"><small class="text-muted">{{ review.created_at|date:"d.m.Y H:i" }}</small></p>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center text-muted">Отзывов пока нет 😔</p>
+            {% endfor %}
+            
+            {% if user.is_authenticated %}
+                <div class="mt-4">
+                    <h3 class="mb-3">Оставить отзыв</h3>
+                    <form method="POST" class="mb-4">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Рейтинг</label>
+                            <select class="form-select" name="rating" id="rating" required>
+                                {% for i in "12345" %}
+                                    <option value="{{ i }}">{{ i }} ★</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Комментарий</label>
+                            <textarea class="form-control" name="comment" id="comment" rows="4" placeholder="Напишите ваш отзыв..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="text-center">
+                    <p class="text-muted">
+                        <a href="{% url 'login_page' %}" class="text-accent">Войдите</a>, чтобы оставить отзыв.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+:root {
+    --primary-color: #46394B;
+    --secondary-color: #5D4E61;
+    --accent-color: #8A6B8C;
+    --light-color: #B8A9B9;
+    --text-color: #E8E8E8;
+    --dark-bg: #2D2A32;
+    --darker-bg: #1E1C22;
+}
+
+body {
+    background: linear-gradient(135deg, var(--darker-bg) 0%, #3A2E40 50%, var(--primary-color) 100%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.card {
+    background-color: rgba(45, 42, 50, 0.95);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+    backdrop-filter: blur(10px);
+}
+
+.card.bg-dark {
+    background-color: rgba(33, 37, 41, 0.7) !important;
+}
+
+.product-image {
+    max-height: 400px;
+    object-fit: contain;
+    width: 100%;
+}
+
+.btn-success {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.text-muted {
+    color: var(--light-color) !important;
+}
+
+.badge.bg-success {
+    background-color: #198754 !important;
+}
+
+.badge.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+.form-control, .form-select {
+    background-color: var(--dark-bg);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-color);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--dark-bg);
+    border-color: var(--accent-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.25rem rgba(138, 107, 140, 0.25);
+}
+.form-label {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+hr {
+    border-color: var(--secondary-color);
+}
+</style>
+{% endblock %}
