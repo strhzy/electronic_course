@@ -74,12 +74,10 @@ class Review(models.Model):
         return f"Отзыв на {self.product.name} от {self.customer}"
     
 class Order(models.Model):
-    buyer_firstname = models.CharField(max_length=150, verbose_name="Имя покупателя",default="")
-    buyer_surname = models.CharField(max_length=150, verbose_name="Фамилия покупателя",default="")
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders", verbose_name="Клиент")
     comment = models.TextField(blank=True, verbose_name="Комментарий")
     delivery_address = models.CharField(max_length=150, verbose_name="Адрес доставки",default="")
     total_price = models.FloatField(verbose_name="Итог", default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders", verbose_name="Клиент")
 
     class Meta:
         verbose_name = "Заказ"

@@ -87,16 +87,12 @@ class ReviewForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['buyer_firstname', 'buyer_surname', 'comment', 'delivery_address']
+        fields = ['comment', 'delivery_address']
         widgets = {
-            'buyer_firstname': forms.TextInput(attrs={'class': 'form-control'}),
-            'buyer_surname': forms.TextInput(attrs={'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'delivery_address': forms.TextInput(attrs={'class': 'form-control'}),
         }
         labels = {
-            'buyer_firstname': 'Имя покупателя',
-            'buyer_surname': 'Фамилия покупателя',
             'comment': 'Комментарий',
             'delivery_address': 'Адрес доставки',
         }

@@ -103,12 +103,12 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'buyer_firstname', 'buyer_surname', 'comment', 'delivery_address')
-    search_fields = ('buyer_firstname', 'buyer_surname', 'delivery_address')
+    list_display = ('id', 'customer', 'comment', 'delivery_address')
+    search_fields = ('delivery_address','customer')
     inlines = [OrderItemInline]
     fieldsets = (
         (None, {
-            'fields': ('buyer_firstname', 'buyer_surname', 'comment', 'delivery_address')
+            'fields': ('customer', 'comment', 'delivery_address')
         }),
     )
 
