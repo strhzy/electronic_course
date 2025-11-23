@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_DB: eshop
     ports:
-     - "5432:5432"
+     - "5435:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d eshop"]
       interval: 5s
@@ -21,16 +21,16 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8283:8080
     depends_on:
       db:
         condition: service_healthy
 
   eshop:
-    image: eshop
+    image: strhzy/eshop:latest
     build: .
     ports:
-      - 8081:8000
+      - 8382:8000
     depends_on:
       db:
         condition: service_healthy
