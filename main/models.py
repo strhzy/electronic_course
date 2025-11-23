@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-
-# Create your models here.
+import os
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Название категории")
@@ -123,6 +122,20 @@ class Log(models.Model):
 
     class Meta:
         verbose_name = "Лог"
+        verbose_name_plural = "Логи"
 
     def __str__(self):
         return f"{self.table}: {self.message} - {self.created_at}"
+    
+def backup_path(instance, filename):
+    return f"backups/{filename}"
+
+class BackupFile(models.Model):
+    file = models.FileField(upload_to=backup_path)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return os.path.basename(self.file.name)
+    class Meta:
+        verbose_name = "Бэкап"
+        verbose_name_plural = "Бэкапы"

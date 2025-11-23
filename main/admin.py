@@ -1,9 +1,83 @@
 from django.contrib import admin
 from import_export.admin import ExportMixin
-from django.contrib import admin
+from django.urls import path
+from django.shortcuts import redirect
+from django.contrib.admin import ModelAdmin, register
+from django.contrib import messages
+from django.conf import settings
+import subprocess
+import os
 from django.http import HttpResponse
-from .models import Category, Manufacturer, Product, Customer, Review, Order, OrderItem, Log
+from .models import *
 import csv
+
+@register(BackupFile)
+class BackupFileAdmin(ModelAdmin):
+    list_display = ("file", "created_at")
+    actions = ["restore_backup"]
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom = [
+            path("make-backup/", self.admin_site.admin_view(self.make_backup_view), name="make_backup"),
+        ]
+        return custom + urls
+
+    def make_backup_view(self, request):
+        try:
+            backup_dir = os.path.join(settings.BASE_DIR, "backups")
+            os.makedirs(backup_dir, exist_ok=True)
+
+            filename = "backup.dump"
+            dest = os.path.join(backup_dir, filename)
+
+            db = settings.DATABASES["default"]
+
+            cmd = [
+                "pg_dump",
+                f"--dbname=postgresql://{db['USER']}:{db['PASSWORD']}@{db['HOST']}:{db['PORT']}/{db['NAME']}",
+                "--format=custom",
+                "-f", dest,
+            ]
+
+            subprocess.run(cmd, check=True)
+
+            BackupFile.objects.create(file=f"backups/{filename}")
+
+            messages.success(request, "Бэкап успешно создан!")
+
+        except Exception as e:
+            messages.error(request, f"Ошибка: {e}")
+
+        return redirect("admin:manager_backupfile_changelist")    
+
+    def restore_backup(self, request, queryset):
+        try:
+            if queryset.count() != 1:
+                self.message_user(request, "Выберите один бэкап!", messages.ERROR)
+                return
+
+            backup = queryset.first()
+            backup_path = backup.file.path
+
+            db = settings.DATABASES["default"]
+
+            cmd = [
+                "pg_restore",
+                f"--dbname=postgresql://{db['USER']}:{db['PASSWORD']}@{db['HOST']}:{db['PORT']}/{db['NAME']}",
+                "--clean",
+                "--if-exists",
+                backup_path,
+            ]
+
+            subprocess.run(cmd, check=True)
+
+            self.message_user(request, "База данных успешно восстановлена!", messages.SUCCESS)
+
+        except Exception as e:
+            self.message_user(request, f"Ошибка восстановления: {e}", messages.ERROR)
+
+    restore_backup.short_description = "Восстановить БД из выбранного бэкапа"
 
 @admin.action(description="Экспортировать выбранные объекты в CSV")
 def export_as_csv(modeladmin, request, queryset):
