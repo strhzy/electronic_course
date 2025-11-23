@@ -27,7 +27,7 @@ services:
         condition: service_healthy
 
   eshop:
-    image: eshop
+    image: strhzy/eshop:latest
     build: .
     ports:
       - 8081:8000
