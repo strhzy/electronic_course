@@ -36,9 +36,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Pull latest image
-        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eshop:latest
-
       - name: Deploy with Docker Compose
         run: |
           sudo docker compose -f compose.yml down
