@@ -66,7 +66,6 @@ class BackupFileAdmin(ModelAdmin):
                 text=True,
             )
 
-            # Относительный путь от MEDIA_ROOT — именно то, что FileField ожидает
             relative_path = f"backups/{filename}"
 
             # Сохраняем в модель
