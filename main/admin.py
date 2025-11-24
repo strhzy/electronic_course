@@ -20,7 +20,6 @@ class BackupFileAdmin(ModelAdmin):
         return False
 
     def get_urls(self):
-        """Добавляем кастомный URL для создания бэкапа."""
         urls = super().get_urls()
         custom = [
             path(
@@ -32,7 +31,6 @@ class BackupFileAdmin(ModelAdmin):
         return custom + urls
 
     def make_backup_view(self, request):
-        """Создаёт бэкап через pg_dump и сохраняет в модель."""
         try:
             backup_dir = os.path.join(settings.BASE_DIR, "backups")
             os.makedirs(backup_dir, exist_ok=True)
@@ -55,7 +53,7 @@ class BackupFileAdmin(ModelAdmin):
 
             subprocess.run(cmd, check=True)
 
-            BackupFile.objects.create(file=os.path.join(settings.BASE_DIR, "backups", filename))
+            BackupFile.objects.create(file=filename)
 
             messages.success(request, "Бэкап успешно создан!")
 
@@ -67,7 +65,6 @@ class BackupFileAdmin(ModelAdmin):
         return redirect("admin:main_backupfile_changelist")
 
     def restore_backup(self, request, queryset):
-        """Восстанавливает БД из выбранного бэкапа."""
         try:
             if queryset.count() != 1:
                 self.message_user(request, "Выберите один бэкап!", messages.ERROR)

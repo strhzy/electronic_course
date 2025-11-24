@@ -147,3 +147,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 CART_SESSION_ID = 'cart'
+BACKUP_ROOT = BASE_DIR / 'backups'
+BACKUP_URL = '/backups/'
