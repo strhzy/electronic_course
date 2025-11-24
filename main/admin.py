@@ -35,7 +35,7 @@ class BackupFileAdmin(ModelAdmin):
             backup_dir = os.path.join(settings.BASE_DIR, "backups")
             os.makedirs(backup_dir, exist_ok=True)
 
-            filename = f"backup-{date.today}.dump"
+            filename = f"backup.dump"
             dest = os.path.join(backup_dir, filename)
 
             db = settings.DATABASES["default"]
@@ -53,7 +53,7 @@ class BackupFileAdmin(ModelAdmin):
 
             subprocess.run(cmd, check=True)
 
-            BackupFile.objects.create(file=f"media/backups/{filename}")
+            BackupFile.objects.create(file=dest)
 
             messages.success(request, "Бэкап успешно создан!")
 
