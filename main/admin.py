@@ -5,8 +5,9 @@ from django.shortcuts import redirect
 from django.contrib.admin import ModelAdmin, register
 from django.contrib import messages
 from django.conf import settings
-import subprocess
 import os
+import subprocess
+from datetime import datetime
 from django.http import HttpResponse
 from .models import *
 import csv
@@ -32,33 +33,51 @@ class BackupFileAdmin(ModelAdmin):
 
     def make_backup_view(self, request):
         try:
-            backup_dir = os.path.join(settings.BASE_DIR, "backups")
-            os.makedirs(backup_dir, exist_ok=True)
+            media_backup_dir = os.path.join(settings.MEDIA_ROOT, 'backups')
+            os.makedirs(media_backup_dir, exist_ok=True)
 
-            filename = f"backup.dump"
-            dest = os.path.join(backup_dir, filename)
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            filename = f"backup_{timestamp}.dump"
+            abs_path = os.path.join(media_backup_dir, filename)
 
             db = settings.DATABASES["default"]
-            db_url = (
-                f"postgresql://{db['USER']}:{db['PASSWORD']}@"
-                f"{db['HOST']}:{db['PORT']}/{db['NAME']}"
-            )
 
+            # Передаём пароль через окружение — безопаснее
+            env = os.environ.copy()
+            env["PGPASSWORD"] = db["PASSWORD"]
+
+            # Формируем аргументы без URL (избегаем подстановки пароля)
             cmd = [
                 "pg_dump",
-                f"--dbname={db_url}",
+                "--host", db.get("HOST", "localhost"),
+                "--port", str(db.get("PORT", "5432")),
+                "--username", db["USER"],
+                "--dbname", db["NAME"],
                 "--format=custom",
-                "-f", dest,
+                "--file", abs_path,
             ]
 
-            subprocess.run(cmd, check=True)
+            result = subprocess.run(
+                cmd,
+                env=env,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
 
-            BackupFile.objects.create(file=dest)
+            # Относительный путь от MEDIA_ROOT — именно то, что FileField ожидает
+            relative_path = f"backups/{filename}"
+
+            # Сохраняем в модель
+            backup = BackupFile(file=relative_path)
+            backup.save()
 
             messages.success(request, "Бэкап успешно создан!")
+            return redirect("admin:main_backupfile_changelist")
 
-        except subprocess.CalledProcessError:
-            messages.error(request, "Ошибка: pg_dump завершился неудачно.")
+        except subprocess.CalledProcessError as e:
+            messages.error(request, f"pg_dump failed: {e.stderr.strip()}")
         except Exception as e:
             messages.error(request, f"Ошибка: {e}")
 
