@@ -44,12 +44,10 @@ def cart_buy(request):
     form = OrderForm(request.POST)
     if form.is_valid():
         order = Order.objects.create(
-            buyer_firstname=form.cleaned_data['buyer_firstname'],
-            buyer_surname=form.cleaned_data['buyer_surname'],
             comment=form.cleaned_data['comment'],
             delivery_address=form.cleaned_data['delivery_address'],
             total_price=cart.get_total_price(),
-            user=request.user
+            customer=request.user
         )
         order.price = cart.get_total_price()
         for item in cart:
@@ -58,7 +56,7 @@ def cart_buy(request):
                 quantity=item['count'],
                 order=order,
             )
-            PRODUCT_SELL = PRODUCT_SELL + item['count']
+            PRODUCT_SELL.inc()
         cart.clear()
     return redirect('cart_detail')
 

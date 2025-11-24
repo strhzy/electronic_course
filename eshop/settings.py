@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'eshop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'db',
+        'HOST': '100.85.46.124',
         'PORT': '5432',
         'NAME': 'eshop',
         'USER': 'admin',

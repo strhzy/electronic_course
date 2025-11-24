@@ -36,6 +36,7 @@ services:
         condition: service_healthy
     volumes:
       - "eshopdata:/app/media"
+      - "./prometheus_multiproc_dir:/app/prometheus_multiproc_dir"
 
 volumes:
   pgdata:

@@ -93,7 +93,7 @@ def about(request, product_id):
     })
 
 def profile_page(request):
-    orders = Order.objects.filter(user=request.user).order_by('id')    
+    orders = Order.objects.filter(customer=request.user).order_by('id')    
     orders_with_items = []
     for order in orders:
         items = OrderItem.objects.filter(order=order)
