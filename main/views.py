@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
+from .metrics import *
 
 # Create your views here.
 def home(request):
@@ -114,6 +115,7 @@ def login_user(request):
             login(request, form.get_user())
             if request.GET.get('next'):
                 return redirect(request.GET.get('next'))
+            USER_AUTHORIZATIONS.inc()
             return redirect('/')
     else:
         form=LoginForm()
@@ -129,6 +131,7 @@ def registration_user(request):
             user = form.save()  # ← создаём нового пользователя
             login(request, user)  # ← и сразу логиним его
             next_url = request.GET.get('next')
+            USER_REGISTRATIONS.inc()
             return redirect(next_url or '/')
     else:
         form = RegistrationForm()

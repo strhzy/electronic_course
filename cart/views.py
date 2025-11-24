@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from main.models import Product, Order, OrderItem
 from .cart import Cart
 from .forms import *
+from main.metrics import *
 
 # Create your views here.
 
@@ -57,6 +58,7 @@ def cart_buy(request):
                 quantity=item['count'],
                 order=order,
             )
+            PRODUCT_SELL = PRODUCT_SELL + item['count']
         cart.clear()
     return redirect('cart_detail')
 
