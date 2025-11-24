@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 import os
+from datetime import date
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Название категории")
@@ -77,6 +78,7 @@ class Order(models.Model):
     comment = models.TextField(blank=True, verbose_name="Комментарий")
     delivery_address = models.CharField(max_length=150, verbose_name="Адрес доставки",default="")
     total_price = models.FloatField(verbose_name="Итог", default=0)
+    order_date = models.DateField(default=date.today, verbose_name="Дата заказа")
 
     class Meta:
         verbose_name = "Заказ"
