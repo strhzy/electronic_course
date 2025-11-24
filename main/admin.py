@@ -53,7 +53,7 @@ class BackupFileAdmin(ModelAdmin):
 
             subprocess.run(cmd, check=True)
 
-            BackupFile.objects.create(file=filename)
+            BackupFile.objects.create(file=f"backups/{filename}")
 
             messages.success(request, "Бэкап успешно создан!")
 
