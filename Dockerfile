@@ -18,4 +18,4 @@ COPY . .
 
 ENTRYPOINT ["sh", "-c"]
 
-CMD ["python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 eshop.wsgi:application"]
+CMD ["python manage.py migrate --fake-initial --noinput && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 eshop.wsgi:application"]
