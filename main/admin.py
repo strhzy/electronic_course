@@ -11,19 +11,28 @@ from django.http import HttpResponse
 from .models import *
 import csv
 
-@register(BackupFile)
+@admin.register(BackupFile)
 class BackupFileAdmin(ModelAdmin):
     list_display = ("file", "created_at")
     actions = ["restore_backup"]
 
+    def has_add_permission(self, request):
+        return False
+
     def get_urls(self):
+        """Добавляем кастомный URL для создания бэкапа."""
         urls = super().get_urls()
         custom = [
-            path("make-backup/", self.admin_site.admin_view(self.make_backup_view), name="make_backup"),
+            path(
+                "make-backup/",
+                self.admin_site.admin_view(self.make_backup_view),
+                name="make_backup",
+            ),
         ]
         return custom + urls
 
     def make_backup_view(self, request):
+        """Создаёт бэкап через pg_dump и сохраняет в модель."""
         try:
             backup_dir = os.path.join(settings.BASE_DIR, "backups")
             os.makedirs(backup_dir, exist_ok=True)
@@ -32,26 +41,34 @@ class BackupFileAdmin(ModelAdmin):
             dest = os.path.join(backup_dir, filename)
 
             db = settings.DATABASES["default"]
+            db_url = (
+                f"postgresql://{db['USER']}:{db['PASSWORD']}@"
+                f"{db['HOST']}:{db['PORT']}/{db['NAME']}"
+            )
 
             cmd = [
                 "pg_dump",
-                f"--dbname=postgresql://{db['USER']}:{db['PASSWORD']}@{db['HOST']}:{db['PORT']}/{db['NAME']}",
+                f"--dbname={db_url}",
                 "--format=custom",
                 "-f", dest,
             ]
 
             subprocess.run(cmd, check=True)
 
+            # Сохраняем запись в БД
             BackupFile.objects.create(file=f"backups/{filename}")
 
             messages.success(request, "Бэкап успешно создан!")
 
+        except subprocess.CalledProcessError:
+            messages.error(request, "Ошибка: pg_dump завершился неудачно.")
         except Exception as e:
             messages.error(request, f"Ошибка: {e}")
 
-        return redirect("admin:manager_backupfile_changelist")    
+        return redirect("admin:main_backupfile_changelist")
 
     def restore_backup(self, request, queryset):
+        """Восстанавливает БД из выбранного бэкапа."""
         try:
             if queryset.count() != 1:
                 self.message_user(request, "Выберите один бэкап!", messages.ERROR)
@@ -60,11 +77,19 @@ class BackupFileAdmin(ModelAdmin):
             backup = queryset.first()
             backup_path = backup.file.path
 
+            if not os.path.exists(backup_path):
+                self.message_user(request, "Файл бэкапа не найден!", messages.ERROR)
+                return
+
             db = settings.DATABASES["default"]
+            db_url = (
+                f"postgresql://{db['USER']}:{db['PASSWORD']}@"
+                f"{db['HOST']}:{db['PORT']}/{db['NAME']}"
+            )
 
             cmd = [
                 "pg_restore",
-                f"--dbname=postgresql://{db['USER']}:{db['PASSWORD']}@{db['HOST']}:{db['PORT']}/{db['NAME']}",
+                f"--dbname={db_url}",
                 "--clean",
                 "--if-exists",
                 backup_path,
@@ -73,6 +98,9 @@ class BackupFileAdmin(ModelAdmin):
             subprocess.run(cmd, check=True)
 
             self.message_user(request, "База данных успешно восстановлена!", messages.SUCCESS)
+
+        except subprocess.CalledProcessError:
+            self.message_user(request, "Ошибка: pg_restore завершился неудачно.", messages.ERROR)
 
         except Exception as e:
             self.message_user(request, f"Ошибка восстановления: {e}", messages.ERROR)
