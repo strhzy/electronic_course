@@ -5,7 +5,7 @@ RUN apt-get update && \
     echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
         > /etc/apt/sources.list.d/pgdg.list && \
     apt-get update && \
-    apt-get install -y postgresql-client-15 && \
+    apt-get install -y postgresql-client-18 && \
     rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 EXPOSE 8000
