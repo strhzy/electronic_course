@@ -133,6 +133,14 @@ class RegistrationForm(UserCreationForm):
         widget=forms.TextInput(attrs={'class':'form-control'}),
         min_length=2,
     )
+    first_name = forms.CharField(
+        label='Имя',
+        widget=forms.TextInput(attrs={'class':'form-control'})
+    )
+    last_name = forms.CharField(
+        label='Фамилия',
+        widget=forms.TextInput(attrs={'class':'form-control'})
+    )
     email = forms.CharField(
         label='E-Mail',
         widget=forms.EmailInput(attrs={'class':'form-control'})
@@ -148,7 +156,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields=['username','email','password1','password2']
+        fields=['username','first_name','last_name','email','password1','password2']
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(

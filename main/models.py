@@ -72,7 +72,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Отзыв на {self.product.name} от {self.customer}"
-    
+
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders", verbose_name="Клиент")
     comment = models.TextField(blank=True, verbose_name="Комментарий")
