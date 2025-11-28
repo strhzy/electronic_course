@@ -5,6 +5,7 @@ from main.models import Product, Order, OrderItem
 from .cart import Cart
 from .forms import *
 from main.metrics import *
+from main.urls import *
 
 # Create your views here.
 
@@ -58,8 +59,7 @@ def cart_buy(request):
             )
             PRODUCT_SELL.inc()
         cart.clear()
-    return redirect('cart_detail')
-
+    return redirect('profile_page')
 @login_required
 def open_order(request):
     context={
