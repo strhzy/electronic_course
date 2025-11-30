@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.db.models import Avg
 from .models import Category, Manufacturer, Product, Customer, Review, Order, OrderItem, CartItem
 from .forms import CategoryForm, ManufacturerForm, ProductForm, CustomerForm, ReviewForm, OrderForm, OrderItemForm, CartItemForm, RegistrationForm, LoginForm
 from cart.forms import CartAddProductForm
@@ -13,7 +14,15 @@ from .metrics import *
 
 # Create your views here.
 def home(request):
-    return render(request, 'main/home.html')
+    # Получаем товары с рейтингом выше 4
+    products = Product.objects.filter(is_exists=True).annotate(
+        avg_rating=Avg('reviews__rating')
+    ).filter(avg_rating__gt=4).order_by('-avg_rating')[:10]
+    
+    context = {
+        'top_products': products
+    }
+    return render(request, 'main/home.html', context)
 
 def cart(request):
     return render(request, 'main/cart.html')
