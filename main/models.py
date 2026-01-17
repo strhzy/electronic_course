@@ -31,7 +31,7 @@ class Product(models.Model):
     name = models.CharField(max_length=256, verbose_name="Название товара")
     description=models.TextField(max_length=1024, null=True, blank=True, default="Нет описания", verbose_name="Описание товара")
     price = models.FloatField(verbose_name="Цена")
-    photo = models.ImageField(upload_to="products/")
+    photo = models.ImageField(upload_to="products/", null=True, blank=True)
     is_exists = models.BooleanField(default=True)
 
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, null=True, verbose_name="Производитель")
