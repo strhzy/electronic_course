@@ -29,6 +29,7 @@ services:
   eshop:
     image: strhzy/eshop:latest
     build: .
+    restart: always
     ports:
       - 8382:8000
     depends_on:
